@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="TypeFirst is a focused typing practice application for German and English."
+    />
+    <script>
+      (() => {
+        try {
+          const storageKey = 'typefirst.theme'
+          let storedPreference = null
+
+          try {
+            storedPreference = window.localStorage.getItem(storageKey)
+          } catch {
+            // Storage failures fall back to the system preference.
+          }
+
+          const preference =
+            storedPreference === 'light' || storedPreference === 'dark' || storedPreference === 'system'
+              ? storedPreference
+              : 'system'
+          let systemPrefersDark = false
+
+          try {
+            systemPrefersDark =
+              preference === 'system' && typeof window.matchMedia === 'function'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                : false
+          } catch {
+            // Unavailable system preference support safely falls back to light.
+          }
+
+          document.documentElement.dataset.theme =
+            preference === 'dark' || systemPrefersDark ? 'dark' : 'light'
+        } catch {
+          document.documentElement.dataset.theme = 'light'
+        }
+      })()
+    </script>
+    <title>TypeFirst</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --font-sans: 'Open Sans', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+
+  --color-background: #f4f7f5;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-muted: #edf3ef;
+  --color-text: #17201b;
+  --color-muted: #5d6a62;
+  --color-primary: #176b4d;
+  --color-primary-hover: #0f523a;
+  --color-primary-contrast: #ffffff;
+  --color-primary-soft: #e4f2eb;
+  --color-border: #d8e1dc;
+  --color-border-strong: #94b6a7;
+  --color-input-background: #ffffff;
+  --color-input-border: #aebcb4;
+  --color-disabled: #87928c;
+  --color-focus-ring: rgba(23, 107, 77, 0.32);
+  --color-success: #226b46;
+  --color-success-surface: #f0faf4;
+  --color-success-border: #b8d9c5;
+  --color-danger: #a52d2d;
+  --color-danger-hover: #842323;
+  --color-danger-contrast: #ffffff;
+  --color-danger-surface: #fff3f2;
+  --color-danger-border: #e2b5b1;
+  --shadow-card: 0 12px 30px rgba(23, 50, 38, 0.08);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-background: #121916;
+  --color-surface: #1a2420;
+  --color-surface-elevated: #202c27;
+  --color-surface-muted: #17211c;
+  --color-text: #e5eee9;
+  --color-muted: #a8b7af;
+  --color-primary: #65c99d;
+  --color-primary-hover: #7bd8ae;
+  --color-primary-contrast: #0b261b;
+  --color-primary-soft: #1d3b2e;
+  --color-border: #35463e;
+  --color-border-strong: #638676;
+  --color-input-background: #151e1a;
+  --color-input-border: #53675d;
+  --color-disabled: #738078;
+  --color-focus-ring: rgba(101, 201, 157, 0.4);
+  --color-success: #79d19d;
+  --color-success-surface: #183326;
+  --color-success-border: #376a4d;
+  --color-danger: #e27b75;
+  --color-danger-hover: #ee928c;
+  --color-danger-contrast: #260e0d;
+  --color-danger-surface: #2b1a1a;
+  --color-danger-border: #74423f;
+  --shadow-card: 0 14px 34px rgba(0, 0, 0, 0.28);
+}
