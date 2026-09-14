@@ -33,8 +33,3 @@ export const getExerciseForLanguage = (language: LanguageId) => {
 
   return exercise
 }
-
-export const getNextExercise = (currentId: string) => {
-  const currentIndex = EXERCISES.findIndex((exercise) => exercise.id === currentId)
-  return EXERCISES[(currentIndex + 1) % EXERCISES.length]
-}

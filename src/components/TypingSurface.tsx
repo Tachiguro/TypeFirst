@@ -1,4 +1,4 @@
-import type { RefObject } from 'react'
+import { Fragment, type RefObject } from 'react'
 import type { SessionStatus } from '../engine/session'
 import type { ReceivedUnit, TargetUnit } from '../engine/text'
 import { TypingInput } from './TypingInput'
@@ -68,13 +68,15 @@ export function TypingSurface({
                   : 'exercise-unit exercise-unit-remaining'
 
             return (
-              <span
-                className={className}
-                data-space={visibleValue === ' ' ? 'true' : undefined}
-                key={`${index}-${unit.normalized}`}
-              >
-                {displayUnit(visibleValue)}
-              </span>
+              <Fragment key={`${index}-${unit.normalized}`}>
+                <span
+                  className={className}
+                  data-space={visibleValue === ' ' ? 'true' : undefined}
+                >
+                  {displayUnit(visibleValue)}
+                </span>
+                {unit.value === ' ' && <wbr />}
+              </Fragment>
             )
           })}
         </span>

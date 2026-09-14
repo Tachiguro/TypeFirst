@@ -1,45 +1,49 @@
-import { useMemo, useRef, useState } from 'react'
-import {
-  DEFAULT_KEYBOARD_LAYOUT_ID,
-  DEFAULT_LANGUAGE_ID,
-  type KeyboardLayoutId,
-  type LanguageId,
-} from '../catalog'
-import {
-  getExerciseForLanguage,
-  getNextExercise,
-  type Exercise,
-} from '../data/exercises'
+import { useEffect, useMemo, useRef } from 'react'
+import { type LanguageId } from '../catalog'
+import { getExerciseForLanguage } from '../data/exercises'
 import {
   isGraphemeSegmentationSupported,
   segmentReceivedText,
   segmentTargetText,
 } from '../engine/text'
 import { useTypingSession } from '../hooks/useTypingSession'
-import { PracticeControls } from './PracticeControls'
 import { SessionMetrics } from './SessionMetrics'
 import { TypingSurface } from './TypingSurface'
 
-const DEFAULT_EXERCISE = getExerciseForLanguage(DEFAULT_LANGUAGE_ID)
+interface TypingPracticeProps {
+  language: LanguageId
+  isActive: boolean
+}
 
-function SupportedTypingPractice() {
-  const [exercise, setExercise] = useState<Exercise>(DEFAULT_EXERCISE)
-  const [keyboardLayout, setKeyboardLayout] = useState<KeyboardLayoutId>(DEFAULT_KEYBOARD_LAYOUT_ID)
+function SupportedTypingPractice({ language, isActive }: TypingPracticeProps) {
+  const exercise = getExerciseForLanguage(language)
+  const initialExerciseRef = useRef(exercise)
+  const previousLanguageRef = useRef(language)
+  const wasActiveRef = useRef(isActive)
   const inputRef = useRef<HTMLInputElement>(null)
   const initialTargetUnits = useMemo(
-    () => segmentTargetText(DEFAULT_EXERCISE.target, DEFAULT_EXERCISE.language),
+    () =>
+      segmentTargetText(initialExerciseRef.current.target, initialExerciseRef.current.language),
     [],
   )
   const typingSession = useTypingSession(initialTargetUnits)
+  const replaceTarget = typingSession.replaceTarget
 
-  const replaceExercise = (nextExercise: Exercise) => {
-    setExercise(nextExercise)
-    typingSession.replaceTarget(segmentTargetText(nextExercise.target, nextExercise.language))
-  }
+  useEffect(() => {
+    if (previousLanguageRef.current === language) {
+      return
+    }
 
-  const handleLanguageChange = (language: LanguageId) => {
-    replaceExercise(getExerciseForLanguage(language))
-  }
+    replaceTarget(segmentTargetText(exercise.target, exercise.language))
+    previousLanguageRef.current = language
+  }, [exercise, language, replaceTarget])
+
+  useEffect(() => {
+    if (isActive && !wasActiveRef.current) {
+      inputRef.current?.focus()
+    }
+    wasActiveRef.current = isActive
+  }, [isActive])
 
   const focusInput = () => inputRef.current?.focus()
 
@@ -48,23 +52,12 @@ function SupportedTypingPractice() {
     focusInput()
   }
 
-  const handleNext = () => {
-    replaceExercise(getNextExercise(exercise.id))
-    focusInput()
-  }
-
   const handleText = (text: string) => {
     typingSession.attemptUnits(segmentReceivedText(text, exercise.language))
   }
 
   return (
-    <section className="practice-card" aria-label="Typing practice">
-      <PracticeControls
-        language={exercise.language}
-        keyboardLayout={keyboardLayout}
-        onLanguageChange={handleLanguageChange}
-        onKeyboardLayoutChange={setKeyboardLayout}
-      />
+    <section className="practice-workspace" aria-label="Typing practice">
       <TypingSurface
         targetUnits={typingSession.session.targetUnits}
         acceptedTargetIndex={typingSession.session.acceptedTargetIndex}
@@ -74,24 +67,20 @@ function SupportedTypingPractice() {
         onText={handleText}
         onBackspace={typingSession.backspace}
       />
-      <SessionMetrics metrics={typingSession.metrics} />
-
-      <div className="session-actions" aria-label="Session actions">
+      <div className="practice-footer">
+        <SessionMetrics metrics={typingSession.metrics} />
         <button className="button button-secondary" type="button" onClick={handleReset}>
-          Reset
-        </button>
-        <button className="button button-primary" type="button" onClick={handleNext}>
-          Next
+          Restart
         </button>
       </div>
     </section>
   )
 }
 
-export function TypingPractice() {
+export function TypingPractice(props: TypingPracticeProps) {
   if (!isGraphemeSegmentationSupported()) {
     return (
-      <section className="practice-card unsupported-browser" aria-label="Typing practice">
+      <section className="unsupported-browser" aria-label="Typing practice">
         <div role="alert">
           <p className="eyebrow">Browser support</p>
           <h2>Grapheme-safe typing is unavailable</h2>
@@ -103,5 +92,5 @@ export function TypingPractice() {
     )
   }
 
-  return <SupportedTypingPractice />
+  return <SupportedTypingPractice {...props} />
 }
