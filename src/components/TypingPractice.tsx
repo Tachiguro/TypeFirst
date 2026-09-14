@@ -1,9 +1,14 @@
 import { useMemo, useRef, useState } from 'react'
 import {
+  DEFAULT_KEYBOARD_LAYOUT_ID,
+  DEFAULT_LANGUAGE_ID,
+  type KeyboardLayoutId,
+  type LanguageId,
+} from '../catalog'
+import {
   getExerciseForLanguage,
   getNextExercise,
   type Exercise,
-  type Language,
 } from '../data/exercises'
 import {
   isGraphemeSegmentationSupported,
@@ -11,15 +16,15 @@ import {
   segmentTargetText,
 } from '../engine/text'
 import { useTypingSession } from '../hooks/useTypingSession'
-import { PracticeControls, type KeyboardLayout } from './PracticeControls'
+import { PracticeControls } from './PracticeControls'
 import { SessionMetrics } from './SessionMetrics'
 import { TypingSurface } from './TypingSurface'
 
-const DEFAULT_EXERCISE = getExerciseForLanguage('de')
+const DEFAULT_EXERCISE = getExerciseForLanguage(DEFAULT_LANGUAGE_ID)
 
 function SupportedTypingPractice() {
   const [exercise, setExercise] = useState<Exercise>(DEFAULT_EXERCISE)
-  const [keyboardLayout, setKeyboardLayout] = useState<KeyboardLayout>('german-qwertz')
+  const [keyboardLayout, setKeyboardLayout] = useState<KeyboardLayoutId>(DEFAULT_KEYBOARD_LAYOUT_ID)
   const inputRef = useRef<HTMLInputElement>(null)
   const initialTargetUnits = useMemo(
     () => segmentTargetText(DEFAULT_EXERCISE.target, DEFAULT_EXERCISE.language),
@@ -32,7 +37,7 @@ function SupportedTypingPractice() {
     typingSession.replaceTarget(segmentTargetText(nextExercise.target, nextExercise.language))
   }
 
-  const handleLanguageChange = (language: Language) => {
+  const handleLanguageChange = (language: LanguageId) => {
     replaceExercise(getExerciseForLanguage(language))
   }
 

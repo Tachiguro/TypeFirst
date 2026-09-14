@@ -1,9 +1,10 @@
-export type Language = 'de' | 'en'
+import type { LanguageId } from '../catalog/types'
+
 export type ExerciseCategory = 'sentences'
 
 export interface Exercise {
   id: string
-  language: Language
+  language: LanguageId
   category: ExerciseCategory
   target: string
 }
@@ -23,7 +24,7 @@ export const EXERCISES: readonly Exercise[] = [
   },
 ]
 
-export const getExerciseForLanguage = (language: Language) => {
+export const getExerciseForLanguage = (language: LanguageId) => {
   const exercise = EXERCISES.find((candidate) => candidate.language === language)
 
   if (!exercise) {
