@@ -404,6 +404,16 @@
   color: var(--color-primary);
 }
 
+.install-action-group {
+  display: grid;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.install-button {
+  justify-self: start;
+}
+
 @media (max-width: 48rem) {
   .app-shell {
     padding-inline: var(--space-3);

@@ -85,6 +85,9 @@ interface SettingsViewProps {
   themePreference: ThemePreference
   language: LanguageId
   keyboardLayout: KeyboardLayoutId
+  canInstall: boolean
+  isInstalled: boolean
+  onInstall: () => void
   onBack: () => void
   onThemeChange: (theme: ThemePreference) => void
   onLanguageChange: (language: LanguageId) => void
@@ -95,6 +98,9 @@ export function SettingsView({
   themePreference,
   language,
   keyboardLayout,
+  canInstall,
+  isInstalled,
+  onInstall,
   onBack,
   onThemeChange,
   onLanguageChange,
@@ -146,6 +152,33 @@ export function SettingsView({
           columns="three"
           onChange={onKeyboardLayoutChange}
         />
+        <section className="settings-card" aria-labelledby="installation-heading">
+          <h2 className="settings-section-title" id="installation-heading">
+            App installation
+          </h2>
+          {isInstalled ? (
+            <p className="setting-help">
+              TypeFirst is installed.
+            </p>
+          ) : canInstall ? (
+            <div className="install-action-group">
+              <p className="setting-help">
+                Install TypeFirst on your device for standalone practice without browser controls.
+              </p>
+              <button
+                className="button button-primary install-button"
+                type="button"
+                onClick={onInstall}
+              >
+                Install TypeFirst
+              </button>
+            </div>
+          ) : (
+            <p className="setting-help">
+              To install TypeFirst as an app, open your browser menu (such as Edge or Chrome) and select Install TypeFirst or Apps.
+            </p>
+          )}
+        </section>
       </div>
     </section>
   )
