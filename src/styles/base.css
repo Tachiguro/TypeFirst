@@ -22,39 +22,19 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-button,
-select {
+button {
   font: inherit;
 }
 
-button:focus-visible,
-select:focus-visible {
+button:focus-visible {
   outline: 3px solid var(--color-focus-ring);
   outline-offset: 2px;
 }
 
-button:disabled,
-select:disabled {
+button:disabled {
   cursor: not-allowed;
   opacity: 0.56;
   transform: none;
-}
-
-select {
-  width: 100%;
-  min-width: 0;
-  min-height: 3rem;
-  padding: 0.65rem 2.5rem 0.65rem 0.9rem;
-  border: 1px solid var(--color-input-border);
-  border-radius: 0.8rem;
-  background: var(--color-input-background);
-  color: var(--color-text);
-  cursor: pointer;
-  transition: border-color 120ms ease, background-color 120ms ease;
-}
-
-select:not(:disabled):hover {
-  border-color: var(--color-border-strong);
 }
 
 .button {
