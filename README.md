@@ -4,16 +4,18 @@ TypeFirst is a fast, web-based typing trainer designed for focused practice in G
 
 ## Project Status
 
-The initial repository bootstrap (`TF-BOOT-001`), First-family web shell (`TF-WEB-001`), and strict typing session engine (`TF-ENGINE-001`) are complete.
+The initial repository bootstrap (`TF-BOOT-001`), First-family web shell (`TF-WEB-001`), strict typing session engine (`TF-ENGINE-001`), and language and layout catalog (`TF-LAYOUT-001`) are complete.
 
 The current baseline is a responsive React/Vite web application featuring:
 - A usable strict typing session with browser-native input capture and retry-in-place error handling.
 - Grapheme-safe, NFC-normalized text comparison with combining-character support.
 - Real-time session metrics (Progress, Elapsed Time, Accuracy, CPM, and WPM).
+- A typed language and layout catalog with canonical German (`de`) and English (`en`) metadata, German QWERTZ (`de-qwertz`), English QWERTY (`en-qwerty`), and German Neo 2 (`de-neo2` modeling conceptual Layers 1–6, navigation actions, keypad semantics, and modifier activators).
+- Catalog-backed practice controls with independent layout selection that preserves running session state and scoring.
 - Minimal German and English sentence exercises with functional Reset and Next cycling.
 - First-family design tokens and pre-paint system/light/dark theme switching.
 
-**Future Scope**: Keyboard-layout selection currently remains metadata only (without OS-level layout emulation). Full Neo 2 / QWERTZ / QWERTY mapping logic, expanded exercise catalogs, persistent statistics, static web hosting (GitHub Pages), and Progressive Web App (PWA) installability remain planned for subsequent packages.
+**Reference Architecture & Future Scope**: Keyboard-layout selection provides reference and training metadata only; scoring remains browser- and OS-authoritative without operating-system layout emulation. Physical keyboard visualization, dynamic finger-placement guidance, expanded exercise corpora, persistent statistics, static web hosting (GitHub Pages), and Progressive Web App (PWA) installability remain planned for subsequent packages.
 
 ## Product Goals
 
