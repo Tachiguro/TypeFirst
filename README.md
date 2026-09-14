@@ -1,15 +1,15 @@
 # TypeFirst
 
-TypeFirst is a fast, web-based typing trainer designed for focused practice in German and English, with first-class support for the **Neo 2** keyboard layout alongside conventional keyboard layouts.
+TypeFirst is a fast, web-based typing trainer designed for focused practice in German and English, with first-class future support for the **Neo 2** keyboard layout alongside conventional keyboard layouts.
 
 ## Project Status
 
-TypeFirst is currently in its **initial repository bootstrap** phase. The repository structure, governance baseline, and project documentation are being established. Application implementation has not yet started.
+The initial repository bootstrap and `TF-WEB-001` First-Family Web Shell are complete. The current baseline is a responsive React/Vite shell with theme support, static practice controls, a typing-surface preview, static session metrics, and Reset/Next controls. Typing input and session behavior are not implemented yet.
 
 ## Product Goals
 
 - **Bilingual Practice**: Dedicated practice material and sessions for German and English.
-- **Neo 2 First-Class Support**: Native design for the Neo 2 keyboard layout and its ergonomic layers, while fully supporting conventional layouts (e.g. QWERTZ, QWERTY).
+- **Neo 2 First-Class Support**: Native design for the Neo 2 keyboard layout and its ergonomic layers, while supporting conventional layouts (such as QWERTZ and QWERTY).
 - **Fast Practice Sessions**: Lightweight, immediate, and distraction-free typing exercises.
 - **Instant Feedback**: Low-latency correctness and error indication during keystroke input.
 - **Progress & Mastery**: Planned support for learning statistics, fluency tracking, and error analysis.

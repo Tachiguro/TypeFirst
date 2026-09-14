@@ -1,41 +1,39 @@
 # TypeFirst Current Operational Work
 
-This document provides operational context for the active in-flight package.
+This document records the stable operational state after the completed documentation reconciliation.
 
 > [!IMPORTANT]
 > This document provides transient operational evidence only. **Live Git and GitHub repository state always takes precedence** over the contents of this file. Newly initialized sessions must inspect live state first (see [docs/NEW_CHAT_BOOTSTRAP.md](NEW_CHAT_BOOTSTRAP.md)).
 
 ---
 
-## 1. Active Package Details
+## 1. Completed Documentation Reconciliation
 
-- **Active Package ID**: `TF-BOOT-001`
-- **Title**: Initial Repository Baseline and Project Bootstrap
-- **Type**: `Bootstrap / Chore`
-- **Active Branch**: `master`
-- **Base / Target**: `master`
-- **Implementation**: Establishing `.gitignore`, `README.md`, `AGENTS.md`, and foundational `docs/`.
-- **Current Lifecycle**: `IMPLEMENT` (completing initial bootstrap commit and push).
-- **Next Lifecycle**: `PLAN_ONLY` (Design system extraction and web-app architecture definition).
+- **Completed Package ID**: `TF-DOC-001`
+- **Title**: Post-Web-Shell State Reconciliation
+- **Type**: Documentation
+- **Status**: Completed
+
+This package reconciled repository documentation after the completed web-shell merge. It did not implement product functionality.
 
 ---
 
-## 2. Package Purpose and Bootstrap Scope
+## 2. Current Stable Baseline
 
-The purpose of `TF-BOOT-001` is to bootstrap TypeFirst as a new GitHub-backed repository with a clean baseline, essential governance rules, and product state documentation.
-
-### Authorized Scope
-1. **`.gitignore`**: Ignore OS files, IDE configs, build artifacts, web dependencies, local DBs, and environment files.
-2. **`README.md`**: Project overview, status, reference repositories, and core goals.
-3. **`AGENTS.md`**: Universal repository invariants, lifecycle isolation, non-delegable operations, and staging policies.
-4. **`docs/NEW_CHAT_BOOTSTRAP.md`**: Discovery and re-anchoring protocol for new chat sessions.
-5. **`docs/CURRENT_WORK.md`**: Operational context for the active bootstrap package.
-6. **`docs/PROJECT_STATE.md`**: Initial product direction, layout requirements, and design family reference.
+- **Completed infrastructure package**: `TF-BOOT-001` — Initial Repository Baseline and Project Bootstrap.
+- **Completed package**: `TF-WEB-001` — First-Family Web Shell.
+- PR #1 (`feat: add TypeFirst web shell`) was merged.
+- **Merge commit**: `e524de1626802f037a97f23a059c09439c922169`.
+- `master` contains the React + TypeScript + Vite web shell.
+- The First-family design system, theme support, and static practice controls, surface, and metrics are present.
+- No real typing engine exists yet.
+- No product implementation package is currently active.
 
 ---
 
-## 3. Downstream Boundaries
+## 3. Next Planned Product Package
 
-- **No Application Code**: Do not implement typing logic, layouts, scoring, or UI components.
-- **No Premature Framework Selection**: Do not install heavy dependencies or configure build tooling during bootstrap.
-- **No Autonomous Expansion**: The next step must be an explicit `PLAN_ONLY` package to inspect KnownFirst/MathFirst design tokens and define the minimal web architecture.
+- **Next planned package**: `TF-ENGINE-001` — Usable Strict Typing Session.
+- **Status**: Planned and pending; it has not been dispatched as an active `IMPLEMENT` lifecycle.
+
+`TF-ENGINE-001` must remain pending until explicitly dispatched through its required lifecycle. It is intended to introduce a minimal usable typing session, not the later keyboard-layout, statistics, backend, or deployment work.
