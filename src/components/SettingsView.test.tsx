@@ -2,12 +2,19 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { SettingsView } from './SettingsView'
 
-const renderSettings = () => {
+interface RenderOptions {
+  canInstall?: boolean
+  isInstalled?: boolean
+}
+
+const renderSettings = (options: RenderOptions = {}) => {
+  const { canInstall = false, isInstalled = false } = options
   const handlers = {
     onBack: vi.fn(),
     onThemeChange: vi.fn(),
     onLanguageChange: vi.fn(),
     onKeyboardLayoutChange: vi.fn(),
+    onInstall: vi.fn(),
   }
 
   render(
@@ -15,6 +22,8 @@ const renderSettings = () => {
       themePreference="system"
       language="de"
       keyboardLayout="de-qwertz"
+      canInstall={canInstall}
+      isInstalled={isInstalled}
       {...handlers}
     />,
   )
@@ -79,5 +88,33 @@ describe('SettingsView', () => {
     expect(heading).toHaveAttribute('tabindex', '-1')
     heading.focus()
     expect(heading).toHaveFocus()
+  })
+
+  it('renders the Install TypeFirst action when available and calls onInstall when clicked', () => {
+    const handlers = renderSettings({ canInstall: true, isInstalled: false })
+
+    const installButton = screen.getByRole('button', { name: 'Install TypeFirst' })
+    expect(installButton).toBeInTheDocument()
+
+    fireEvent.click(installButton)
+    expect(handlers.onInstall).toHaveBeenCalledOnce()
+  })
+
+  it('renders installed-state text and no install button when already installed', () => {
+    renderSettings({ canInstall: false, isInstalled: true })
+
+    expect(screen.getByText('TypeFirst is installed.')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Install TypeFirst' })).not.toBeInTheDocument()
+  })
+
+  it('renders fallback browser guidance when installation is not directly available', () => {
+    renderSettings({ canInstall: false, isInstalled: false })
+
+    expect(
+      screen.getByText(
+        'To install TypeFirst as an app, open your browser menu (such as Edge or Chrome) and select Install TypeFirst or Apps.',
+      ),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Install TypeFirst' })).not.toBeInTheDocument()
   })
 })

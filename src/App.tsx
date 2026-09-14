@@ -8,6 +8,7 @@ import {
 import { SettingsView, type ThemePreference } from './components/SettingsView'
 import { TypingPractice } from './components/TypingPractice'
 import { useFullscreen } from './hooks/useFullscreen'
+import { usePwaInstall } from './hooks/usePwaInstall'
 
 export type { ThemePreference } from './components/SettingsView'
 
@@ -66,6 +67,7 @@ function App() {
   const appShellRef = useRef<HTMLDivElement>(null)
   const { isSupported: isFullscreenSupported, isFullscreen, toggleFullscreen } =
     useFullscreen(appShellRef)
+  const { canInstall, isInstalled, install } = usePwaInstall()
 
   useEffect(() => {
     const colorScheme = getColorScheme()
@@ -133,6 +135,9 @@ function App() {
             themePreference={themePreference}
             language={language}
             keyboardLayout={keyboardLayout}
+            canInstall={canInstall}
+            isInstalled={isInstalled}
+            onInstall={() => void install()}
             onBack={() => setUiMode('practice')}
             onThemeChange={setThemePreference}
             onLanguageChange={setLanguage}

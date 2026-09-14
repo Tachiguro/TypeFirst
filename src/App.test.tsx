@@ -440,4 +440,148 @@ describe('TypeFirst shell', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('Grapheme-safe typing is unavailable')
     expect(screen.queryByRole('textbox', { name: 'Typing input' })).not.toBeInTheDocument()
   })
+
+  it('captures beforeinstallprompt before opening Settings and preserves Install action in Settings', () => {
+    const event = new Event('beforeinstallprompt', { cancelable: true })
+    const preventDefault = vi.spyOn(event, 'preventDefault')
+    const prompt = vi.fn().mockResolvedValue(undefined)
+    Object.defineProperties(event, {
+      platforms: { value: ['web'], configurable: true },
+      userChoice: {
+        value: Promise.resolve({ outcome: 'accepted', platform: 'web' }),
+        configurable: true,
+      },
+      prompt: { value: prompt, configurable: true },
+    })
+
+    render(<App />)
+
+    act(() => {
+      window.dispatchEvent(event)
+    })
+    expect(preventDefault).toHaveBeenCalledOnce()
+
+    openSettings()
+
+    expect(screen.getByRole('button', { name: 'Install TypeFirst' })).toBeInTheDocument()
+  })
+
+  it('invokes the deferred prompt when the Settings Install button is clicked', async () => {
+    const event = new Event('beforeinstallprompt', { cancelable: true })
+    const prompt = vi.fn().mockResolvedValue(undefined)
+    Object.defineProperties(event, {
+      platforms: { value: ['web'], configurable: true },
+      userChoice: {
+        value: Promise.resolve({ outcome: 'accepted', platform: 'web' }),
+        configurable: true,
+      },
+      prompt: { value: prompt, configurable: true },
+    })
+
+    render(<App />)
+
+    act(() => {
+      window.dispatchEvent(event)
+    })
+
+    openSettings()
+    fireEvent.click(screen.getByRole('button', { name: 'Install TypeFirst' }))
+
+    await waitFor(() => expect(prompt).toHaveBeenCalledOnce())
+    expect(screen.queryByRole('button', { name: 'Install TypeFirst' })).not.toBeInTheDocument()
+  })
+
+  it('hides install action and shows installed-state message when appinstalled event fires', () => {
+    const event = new Event('beforeinstallprompt', { cancelable: true })
+    Object.defineProperties(event, {
+      platforms: { value: ['web'], configurable: true },
+      userChoice: {
+        value: Promise.resolve({ outcome: 'accepted', platform: 'web' }),
+        configurable: true,
+      },
+      prompt: { value: vi.fn().mockResolvedValue(undefined), configurable: true },
+    })
+
+    render(<App />)
+
+    act(() => {
+      window.dispatchEvent(event)
+    })
+
+    openSettings()
+    expect(screen.getByRole('button', { name: 'Install TypeFirst' })).toBeInTheDocument()
+
+    act(() => {
+      window.dispatchEvent(new Event('appinstalled'))
+    })
+
+    expect(
+      screen.getByText('TypeFirst is installed.'),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Install TypeFirst' })).not.toBeInTheDocument()
+  })
+
+  it('renders fallback install guidance when beforeinstallprompt has not fired', () => {
+    render(<App />)
+    openSettings()
+
+    expect(
+      screen.getByText(
+        'To install TypeFirst as an app, open your browser menu (such as Edge or Chrome) and select Install TypeFirst or Apps.',
+      ),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Install TypeFirst' })).not.toBeInTheDocument()
+  })
+
+  it('does not offer installation when running in standalone display-mode', () => {
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query === '(display-mode: standalone)',
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }))
+
+    render(<App />)
+    openSettings()
+
+    expect(
+      screen.getByText('TypeFirst is installed.'),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Install TypeFirst' })).not.toBeInTheDocument()
+  })
+
+  it('preserves the active typing session across install-related event updates', () => {
+    render(<App />)
+    enterText('F')
+    const progress = getMetricValue('Progress')?.textContent
+    const accuracy = getMetricValue('Accuracy')?.textContent
+
+    const event = new Event('beforeinstallprompt', { cancelable: true })
+    Object.defineProperties(event, {
+      platforms: { value: ['web'], configurable: true },
+      userChoice: {
+        value: Promise.resolve({ outcome: 'accepted', platform: 'web' }),
+        configurable: true,
+      },
+      prompt: { value: vi.fn().mockResolvedValue(undefined), configurable: true },
+    })
+
+    act(() => {
+      window.dispatchEvent(event)
+    })
+
+    expect(getMetricValue('Progress')).toHaveTextContent(progress ?? '')
+    expect(getMetricValue('Accuracy')).toHaveTextContent(accuracy ?? '')
+
+    act(() => {
+      window.dispatchEvent(new Event('appinstalled'))
+    })
+
+    expect(getMetricValue('Progress')).toHaveTextContent(progress ?? '')
+    expect(getMetricValue('Accuracy')).toHaveTextContent(accuracy ?? '')
+  })
 })
