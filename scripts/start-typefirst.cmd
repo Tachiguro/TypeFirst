@@ -12,7 +12,7 @@ if errorlevel 1 (
 where node >nul 2>&1
 if errorlevel 1 (
     echo [ERROR] Node.js is not found in PATH.
-    echo Please install Node.js (https://nodejs.org/) to run TypeFirst locally.
+    echo Please install Node.js from https://nodejs.org/ to run TypeFirst locally.
     pause
     exit /b 1
 )
