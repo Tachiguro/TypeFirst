@@ -11,7 +11,7 @@ This document records the stable operational state after the completed documenta
 
 - **`TF-BOOT-001`** — Initial Repository Baseline and Project Bootstrap
 - **`TF-WEB-001`** — First-Family Web Shell (PR #1, merge commit `e524de1626802f037a97f23a059c09439c922169`)
-- **`TF-DOC-001`** — Post-Web-Shell State Reconciliation (PR #2, merge commit `7cd8af2c0d8bfa79f64c63bf107e3a9dc9109b0b`)
+- **`TF-DOC-001`** — Post-Web-Shell State Reconciliation (PR #2, merge commit `7cd8af21b49a1031f7afd2d093f88794cb6100eb`)
 - **`TF-ENGINE-001`** — Usable Strict Typing Session
   - **Pull Request**: PR #3 (`feat: add strict typing session engine`)
   - **Feature Commit**: `db95aa8720d0c44e8f651481dcaf8e26519dc17c`

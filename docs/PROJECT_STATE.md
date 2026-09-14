@@ -69,7 +69,7 @@ The current baseline (`TF-ENGINE-001`) provides:
 - Strict retry-in-place error behavior: incorrect input halts cursor advancement and flags the target character as errored until correctly resolved.
 - Correct retry advances the target position.
 - Backspace clears only the active error character; accepted text cannot be rewound.
-- Mistakes persist in accuracy and error count metrics.
+- Mistakes remain represented in accuracy because printable attempts are retained.
 - Completion freezes elapsed time and marks the session completed.
 - Reset restarts the current exercise.
 - Next deterministically cycles between available exercises.
@@ -81,16 +81,16 @@ The current baseline (`TF-ENGINE-001`) provides:
 - Accessible fallback notice when running on browsers lacking `Intl.Segmenter` support.
 
 ### Browser Input Handling
-- Scores logical text from committed browser input (`beforeinput` / `input`) rather than raw `keydown`.
+- Scores logical committed browser text from `input` and finalized composition events rather than printable `keydown`.
 - Intermediate IME composition strings are not scored.
 - Composition commits are deduplicated and scored cleanly.
-- Dead keys are ignored during composing.
+- Dead keys and composition sequences do not produce premature input scoring.
 - Paste, drag-and-drop, and replacement/autocorrect insertions are rejected.
 
 ### Real-Time Metrics & Feedback
 - Progress percentage based on completed graphemes.
-- Elapsed time clock with millisecond precision tracking.
-- Real-time Accuracy percentage reflecting total attempts vs. errors.
+- Elapsed time clock (formatted as mm:ss) updated during running sessions.
+- Real-time Accuracy percentage reflecting accepted units divided by total printable attempts.
 - Real-time Characters Per Minute (CPM) and Words Per Minute (WPM = CPM / 5).
 
 ### Controls & Exercises
