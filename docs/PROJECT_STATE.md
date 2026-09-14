@@ -1,6 +1,6 @@
 # TypeFirst Verified Project State
 
-This document records stable, verified facts about TypeFirst. It distinguishes verified current state from accepted target architecture and product direction.
+This document records stable, verified facts about TypeFirst. It distinguishes the implemented baseline from accepted product direction and future plans.
 
 ---
 
@@ -11,47 +11,79 @@ This document records stable, verified facts about TypeFirst. It distinguishes v
 - **Owner**: Tachiguro
 - **Visibility**: Public
 - **Default Branch**: `master`
-- **Current Status**: Repository baseline initialized; initial bootstrap package `TF-BOOT-001` in progress.
+- **Current Baseline**: `TF-WEB-001` — First-Family Web Shell, merged through PR #1 at `e524de1626802f037a97f23a059c09439c922169`.
 
 ---
 
 ## 2. Product Vision & Direction
 
-TypeFirst is a lightweight, focused, web-based typing trainer built to provide fast, responsive, and distraction-free typing practice.
+TypeFirst is a lightweight, focused web typing trainer for fast, responsive, and distraction-free practice.
 
 ### Primary Goals
-1. **German & English Typing Practice**: Tailored practice corpora, word lists, n-grams, and sentences for both languages.
-2. **Neo 2 as a First-Class Layout**: Deep native support for the German ergonomic Neo 2 keyboard layout across its layers (Layer 1–6), including visual guides, finger assignments, and layer-switching exercises.
-3. **Conventional Layout Support**: Full support for conventional keyboard layouts (QWERTZ, QWERTY, etc.) alongside Neo 2.
-4. **Fast Practice Sessions**: Instant-launch exercises with zero friction, optimized for short, high-frequency practice bursts.
-5. **Immediate Correctness & Error Feedback**: Character-by-character real-time feedback with precise error visualization and minimal latency.
-6. **Future Statistics & Progress Tracking**: Planned longitudinal metrics, speed (WPM/CPM), accuracy, error heatmaps, and weakness-targeted practice sessions.
+
+1. **German & English Typing Practice**: Practice material and sessions for both languages.
+2. **Neo 2 as a First-Class Layout**: Native future support for the German ergonomic Neo 2 layout.
+3. **Conventional Layout Support**: Support for conventional QWERTZ and QWERTY layouts.
+4. **Low-Friction Sessions**: Instant-launch exercises optimized for short, high-frequency practice.
+5. **Immediate Character-Level Feedback**: Real-time correctness and error feedback with minimal latency.
+6. **Later Statistics & Progress Tracking**: Longitudinal metrics, speed, accuracy, error analysis, and weakness-targeted practice.
 
 ---
 
-## 3. Design System & Brand Family Alignment
+## 3. Accepted Platform & Architecture
 
-TypeFirst visually belongs to the same product family as **KnownFirst** and **MathFirst**.
-
-### Reference Repositories
-- **KnownFirst**: https://github.com/Tachiguro/KnownFirst
-- **MathFirst**: https://github.com/Tachiguro/MathFirst
-
-### Shared Visual Elements
-KnownFirst and MathFirst serve as authoritative design references for:
-- **Color Palette & Theme Tokens**: Primary accents, background layers, neutral surfaces, text contrast levels, and semantic feedback colors (success/correct, warning, danger/error).
-- **Typography & Font Scaling**: Clean, readable sans-serif typography, heading scales, monospace numeral styling, and hierarchy.
-- **Spacing & Layout Metrics**: Consistent spacing rhythm (4px/8px grid), padding, card radii, and visual density.
-- **Component Styling & Micro-Interactions**: Button styles, input boxes, HUD layouts, session status indicators, and modal designs.
-- **Naming Conventions**: Unified naming conventions across components and design tokens where applicable.
-
-> [!IMPORTANT]
-> Do not invent TypeFirst branding or visual styles independently if equivalent design tokens and conventions can be derived from KnownFirst and MathFirst.
+- **Platform**: Web application.
+- **Frontend**: React + TypeScript.
+- **Build tooling**: Vite.
+- **Package manager**: pnpm.
+- **Styling**: Plain CSS using shared First-family design tokens.
+- **Testing**: Vitest + React Testing Library.
+- **Current application baseline**: One-screen responsive TypeFirst web shell.
+- **Theme support**: System, light, and dark preferences.
+- **Theme initialization**: Pre-paint resolution avoids an incorrect-theme flash.
 
 ---
 
-## 4. Platform & Technical Architecture Principles
+## 4. First-Family Design Direction
 
-- **Web-First Platform**: TypeFirst is designed specifically as a web application running in modern web browsers.
-- **Appropriate Web Architecture**: While visual design tokens are shared with KnownFirst and MathFirst, their native MAUI Blazor Hybrid application architecture should not be copied blindly. TypeFirst will adopt a clean, modern web-app architecture suited for responsive browser execution.
-- **No Premature Implementation**: Architecture choices, frontend frameworks, and build tooling will be formally evaluated and approved in a subsequent `PLAN_ONLY` phase prior to implementation.
+TypeFirst reuses the shared First-family visual language derived from [KnownFirst](https://github.com/Tachiguro/KnownFirst) and [MathFirst](https://github.com/Tachiguro/MathFirst). The implemented direction includes a green-centered palette, light and dark semantic tokens, a 4px/8px spacing rhythm, the shared typography stack, focus-visible behavior, shared surface/border/card styling, and semantic success/error colors.
+
+The sibling projects remain the authoritative visual references. TypeFirst uses a browser-appropriate application architecture rather than copying their native architecture.
+
+---
+
+## 5. Implemented Web-Shell Baseline
+
+The current shell provides:
+
+- React/Vite application foundation.
+- First-family visual shell and responsive UI.
+- Accessibility baseline and theme handling.
+- Static German / English language selector.
+- Static German QWERTZ / English QWERTY / Neo 2 layout selector.
+- Static Characters / N-grams / Words / Sentences category selector.
+- Static typing-surface preview and session metrics.
+- Static Reset and Next controls.
+- Shell and pre-paint theme tests.
+
+---
+
+## 6. Not Yet Implemented
+
+The web shell does not yet include:
+
+- Actual typing capture, a typing reducer/session engine, or a `KeyboardEvent` input adapter.
+- Grapheme-safe/NFC text handling or wrong/correct character progression.
+- Session timer, accuracy calculation, or CPM/WPM calculation.
+- Exercise catalog, Neo 2 mappings, or QWERTZ/QWERTY mappings.
+- Statistics/history, authentication, backend, deployment, or persistent progress tracking.
+
+---
+
+## 7. Next Planned Package Boundary
+
+**Next planned implementation package**: `TF-ENGINE-001` — Usable Strict Typing Session.
+
+This pending package is intended to add real typing input capture, deterministic strict typing-session behavior, character-level correctness feedback, normalization- and grapheme-safe text handling, reset/completion behavior, and one minimal German plus one minimal English exercise.
+
+It must not be expanded prematurely into full keyboard-layout mapping, complete Neo 2 layers, large exercise corpora, persistent statistics, authentication, backend, or deployment. Those remain later work.
