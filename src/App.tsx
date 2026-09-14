@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
-import { PracticeControls } from './components/PracticeControls'
-import { SessionMetrics } from './components/SessionMetrics'
-import { TypingSurface } from './components/TypingSurface'
+import { TypingPractice } from './components/TypingPractice'
 
 export type ThemePreference = 'system' | 'light' | 'dark'
 
@@ -88,20 +86,7 @@ function App() {
           </label>
         </header>
 
-        <section className="practice-card" aria-label="Typing practice">
-          <PracticeControls />
-          <TypingSurface />
-          <SessionMetrics />
-
-          <div className="session-actions" aria-label="Session actions">
-            <button className="button button-secondary" type="button">
-              Reset
-            </button>
-            <button className="button button-primary" type="button">
-              Next
-            </button>
-          </div>
-        </section>
+        <TypingPractice />
       </main>
     </div>
   )
