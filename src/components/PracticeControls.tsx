@@ -1,18 +1,18 @@
-import type { Language } from '../data/exercises'
-
-export type KeyboardLayout = 'german-qwertz' | 'english-qwerty' | 'neo-2'
+import {
+  LANGUAGES,
+  KEYBOARD_LAYOUTS,
+  isLanguageId,
+  isKeyboardLayoutId,
+  type LanguageId,
+  type KeyboardLayoutId,
+} from '../catalog'
 
 interface PracticeControlsProps {
-  language: Language
-  keyboardLayout: KeyboardLayout
-  onLanguageChange: (language: Language) => void
-  onKeyboardLayoutChange: (layout: KeyboardLayout) => void
+  language: LanguageId
+  keyboardLayout: KeyboardLayoutId
+  onLanguageChange: (language: LanguageId) => void
+  onKeyboardLayoutChange: (layout: KeyboardLayoutId) => void
 }
-
-const isLanguage = (value: string): value is Language => value === 'de' || value === 'en'
-
-const isKeyboardLayout = (value: string): value is KeyboardLayout =>
-  value === 'german-qwertz' || value === 'english-qwerty' || value === 'neo-2'
 
 export function PracticeControls({
   language,
@@ -34,13 +34,16 @@ export function PracticeControls({
             id="language"
             value={language}
             onChange={(event) => {
-              if (isLanguage(event.target.value)) {
+              if (isLanguageId(event.target.value)) {
                 onLanguageChange(event.target.value)
               }
             }}
           >
-            <option value="de">German</option>
-            <option value="en">English</option>
+            {LANGUAGES.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.displayName}
+              </option>
+            ))}
           </select>
         </label>
 
@@ -52,14 +55,16 @@ export function PracticeControls({
             value={keyboardLayout}
             aria-describedby="keyboard-layout-help"
             onChange={(event) => {
-              if (isKeyboardLayout(event.target.value)) {
+              if (isKeyboardLayoutId(event.target.value)) {
                 onKeyboardLayoutChange(event.target.value)
               }
             }}
           >
-            <option value="german-qwertz">German QWERTZ</option>
-            <option value="english-qwerty">English QWERTY</option>
-            <option value="neo-2">Neo 2</option>
+            {KEYBOARD_LAYOUTS.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.displayName}
+              </option>
+            ))}
           </select>
           <small id="keyboard-layout-help" className="field-help">
             Typing follows your active OS and browser keyboard layout.

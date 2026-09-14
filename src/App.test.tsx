@@ -46,14 +46,39 @@ describe('TypeFirst shell', () => {
     })
   })
 
-  it('renders the practice shell and its accessible controls', () => {
+  it('renders the practice shell and its accessible controls with catalog-backed options', () => {
     render(<App />)
 
     expect(screen.getByRole('heading', { level: 1, name: 'TypeFirst' })).toBeInTheDocument()
-    expect(screen.getByRole('combobox', { name: 'Language' })).toBeInTheDocument()
-    expect(screen.getByRole('combobox', { name: 'Keyboard layout' })).toBeInTheDocument()
+    const languageSelect = screen.getByRole('combobox', { name: 'Language' })
+    const layoutSelect = screen.getByRole('combobox', { name: 'Keyboard layout' })
+    expect(languageSelect).toBeInTheDocument()
+    expect(layoutSelect).toBeInTheDocument()
     expect(screen.getByRole('combobox', { name: 'Exercise category' })).toBeInTheDocument()
     expect(screen.getByRole('region', { name: 'Typing surface' })).toBeInTheDocument()
+
+    // Verify catalog-backed language options and default
+    expect(languageSelect).toHaveValue('de')
+    const languageOptions = within(languageSelect).getAllByRole('option')
+    expect(languageOptions.map((o) => (o as HTMLOptionElement).value)).toEqual(['de', 'en'])
+    expect(languageOptions.map((o) => o.textContent)).toEqual(['German', 'English'])
+
+    // Verify catalog-backed layout options, default, and helper text
+    expect(layoutSelect).toHaveValue('de-qwertz')
+    const layoutOptions = within(layoutSelect).getAllByRole('option')
+    expect(layoutOptions.map((o) => (o as HTMLOptionElement).value)).toEqual([
+      'de-qwertz',
+      'en-qwerty',
+      'de-neo2',
+    ])
+    expect(layoutOptions.map((o) => o.textContent)).toEqual([
+      'German QWERTZ',
+      'English QWERTY',
+      'German Neo 2',
+    ])
+    expect(
+      screen.getByText('Typing follows your active OS and browser keyboard layout.'),
+    ).toBeInTheDocument()
 
     for (const label of ['Progress', 'Elapsed time', 'Accuracy', 'CPM', 'WPM']) {
       expect(screen.getByText(label)).toBeInTheDocument()
@@ -153,16 +178,31 @@ describe('TypeFirst shell', () => {
     expect(getMetricValue('Accuracy')).toHaveTextContent('—')
   })
 
+  it('preserves the currently selected layout when switching language', () => {
+    render(<App />)
+    const layoutSelect = screen.getByRole('combobox', { name: 'Keyboard layout' })
+    const languageSelect = screen.getByRole('combobox', { name: 'Language' })
+
+    fireEvent.change(layoutSelect, { target: { value: 'de-neo2' } })
+    expect(layoutSelect).toHaveValue('de-neo2')
+
+    fireEvent.change(languageSelect, { target: { value: 'en' } })
+    expect(layoutSelect).toHaveValue('de-neo2')
+
+    fireEvent.change(languageSelect, { target: { value: 'de' } })
+    expect(layoutSelect).toHaveValue('de-neo2')
+  })
+
   it('keeps layout selection as metadata without transforming or resetting scoring', () => {
     render(<App />)
     enterText('F')
     const progressAfterFirstUnit = getMetricValue('Progress')?.textContent
 
     fireEvent.change(screen.getByRole('combobox', { name: 'Keyboard layout' }), {
-      target: { value: 'neo-2' },
+      target: { value: 'de-neo2' },
     })
 
-    expect(screen.getByRole('combobox', { name: 'Keyboard layout' })).toHaveValue('neo-2')
+    expect(screen.getByRole('combobox', { name: 'Keyboard layout' })).toHaveValue('de-neo2')
     expect(getMetricValue('Progress')).toHaveTextContent(progressAfterFirstUnit ?? '')
 
     enterText('l')
