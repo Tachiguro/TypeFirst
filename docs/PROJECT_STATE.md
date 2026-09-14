@@ -11,7 +11,7 @@ This document records stable, verified facts about TypeFirst. It distinguishes t
 - **Owner**: Tachiguro
 - **Visibility**: Public
 - **Default Branch**: `master`
-- **Current Baseline**: `TF-WEB-001` — First-Family Web Shell, merged through PR #1 at `e524de1626802f037a97f23a059c09439c922169`.
+- **Current Baseline**: `TF-ENGINE-001` — Usable Strict Typing Session, merged through PR #3 at `c74706ab1158dfbf87b0320039e6fee41362e45f`.
 
 ---
 
@@ -38,9 +38,16 @@ TypeFirst is a lightweight, focused web typing trainer for fast, responsive, and
 - **Package manager**: pnpm.
 - **Styling**: Plain CSS using shared First-family design tokens.
 - **Testing**: Vitest + React Testing Library.
-- **Current application baseline**: One-screen responsive TypeFirst web shell.
+- **Application baseline**: One-screen responsive TypeFirst web application with active strict typing engine.
 - **Theme support**: System, light, and dark preferences.
 - **Theme initialization**: Pre-paint resolution avoids an incorrect-theme flash.
+
+### Hosting & Installability Direction
+
+- **Web Delivery**: TypeFirst remains a normal web application intended for static public hosting via GitHub Pages (planned, not implemented).
+- **PWA Installability**: The web app will support Progressive Web App (PWA) installation to allow launching from desktop/start-menu/dock icons like a native application (planned, not implemented).
+- **Native Applications**: No separate native Windows or macOS wrappers are currently planned; local dev-server startup is not an end-user delivery mechanism.
+- **Service Worker / Offline**: Offline caching and service worker strategies are not yet decided or implemented.
 
 ---
 
@@ -52,38 +59,69 @@ The sibling projects remain the authoritative visual references. TypeFirst uses 
 
 ---
 
-## 5. Implemented Web-Shell Baseline
+## 5. Implemented Engine & Shell Baseline
 
-The current shell provides:
+The current baseline (`TF-ENGINE-001`) provides:
 
-- React/Vite application foundation.
-- First-family visual shell and responsive UI.
-- Accessibility baseline and theme handling.
-- Static German / English language selector.
-- Static German QWERTZ / English QWERTY / Neo 2 layout selector.
-- Static Characters / N-grams / Words / Sentences category selector.
-- Static typing-surface preview and session metrics.
-- Static Reset and Next controls.
-- Shell and pre-paint theme tests.
+### Session Engine & State Machine
+- Deterministic session states: `idle`, `running`, and `completed`.
+- First printable input attempt triggers the running timer.
+- Strict retry-in-place error behavior: incorrect input halts cursor advancement and flags the target character as errored until correctly resolved.
+- Correct retry advances the target position.
+- Backspace clears only the active error character; accepted text cannot be rewound.
+- Mistakes remain represented in accuracy because printable attempts are retained.
+- Completion freezes elapsed time and marks the session completed.
+- Reset restarts the current exercise.
+- Next deterministically cycles between available exercises.
+
+### Text Handling & Internationalization
+- NFC normalization across all input and exercise texts.
+- Grapheme segmentation using `Intl.Segmenter` for combining characters and ZWJ sequences.
+- Explicit scoreable space rendering and verification.
+- Accessible fallback notice when running on browsers lacking `Intl.Segmenter` support.
+
+### Browser Input Handling
+- Scores logical committed browser text from `input` and finalized composition events rather than printable `keydown`.
+- Intermediate IME composition strings are not scored.
+- Composition commits are deduplicated and scored cleanly.
+- Dead keys and composition sequences do not produce premature input scoring.
+- Paste, drag-and-drop, and replacement/autocorrect insertions are rejected.
+
+### Real-Time Metrics & Feedback
+- Progress percentage based on completed graphemes.
+- Elapsed time clock (formatted as mm:ss) updated during running sessions.
+- Real-time Accuracy percentage reflecting accepted units divided by total printable attempts.
+- Real-time Characters Per Minute (CPM) and Words Per Minute (WPM = CPM / 5).
+
+### Controls & Exercises
+- Minimal exercise catalog: one German sentence and one English sentence.
+- Functional language switcher (German / English) updating current exercise text.
+- Keyboard layout selector present as metadata (currently does not emulate OS keyboard mappings).
+- Category selector currently exposing the Sentences category.
+- Functional Reset and Next controls.
 
 ---
 
 ## 6. Not Yet Implemented
 
-The web shell does not yet include:
+The current baseline intentionally does not yet include:
 
-- Actual typing capture, a typing reducer/session engine, or a `KeyboardEvent` input adapter.
-- Grapheme-safe/NFC text handling or wrong/correct character progression.
-- Session timer, accuracy calculation, or CPM/WPM calculation.
-- Exercise catalog, Neo 2 mappings, or QWERTZ/QWERTY mappings.
-- Statistics/history, authentication, backend, deployment, or persistent progress tracking.
+- Full language and layout catalog.
+- Real QWERTZ and QWERTY mapping metadata and validation logic.
+- Neo 2 first-class key mapping, visual representation, and layer switching (Layers 1–6).
+- Physical keyboard visualization and dynamic finger placement guidance.
+- Expanded exercise corpora (Characters, N-grams, Words, and multi-sentence catalogs).
+- Adaptive weakness training and error-focused exercise generation.
+- Persistent session history, local storage continuity, or progress analytics.
+- Backend services, databases, or user authentication.
+- Static-hosting configuration (GitHub Pages) or PWA manifest/service worker.
 
 ---
 
-## 7. Next Planned Package Boundary
+## 7. Next Package Boundaries
 
-**Next planned implementation package**: `TF-ENGINE-001` — Usable Strict Typing Session.
+- **Next planned product package**: `TF-LAYOUT-001` — Language and Layout Catalog (planned/pending; not active).
+- **Later package**: `TF-SESSION-001` — Metrics and Local Continuity.
+- **Later browser/hosting package**: `TF-BROWSER-001` — Browser and Static-Hosting Readiness.
 
-This pending package is intended to add real typing input capture, deterministic strict typing-session behavior, character-level correctness feedback, normalization- and grapheme-safe text handling, reset/completion behavior, and one minimal German plus one minimal English exercise.
-
-It must not be expanded prematurely into full keyboard-layout mapping, complete Neo 2 layers, large exercise corpora, persistent statistics, authentication, backend, or deployment. Those remain later work.
+None of these packages are currently active. Implementation must only proceed upon explicit dispatch of the respective lifecycle package.

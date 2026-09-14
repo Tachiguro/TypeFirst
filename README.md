@@ -4,7 +4,16 @@ TypeFirst is a fast, web-based typing trainer designed for focused practice in G
 
 ## Project Status
 
-The initial repository bootstrap and `TF-WEB-001` First-Family Web Shell are complete. The current baseline is a responsive React/Vite shell with theme support, static practice controls, a typing-surface preview, static session metrics, and Reset/Next controls. Typing input and session behavior are not implemented yet.
+The initial repository bootstrap (`TF-BOOT-001`), First-family web shell (`TF-WEB-001`), and strict typing session engine (`TF-ENGINE-001`) are complete.
+
+The current baseline is a responsive React/Vite web application featuring:
+- A usable strict typing session with browser-native input capture and retry-in-place error handling.
+- Grapheme-safe, NFC-normalized text comparison with combining-character support.
+- Real-time session metrics (Progress, Elapsed Time, Accuracy, CPM, and WPM).
+- Minimal German and English sentence exercises with functional Reset and Next cycling.
+- First-family design tokens and pre-paint system/light/dark theme switching.
+
+**Future Scope**: Keyboard-layout selection currently remains metadata only (without OS-level layout emulation). Full Neo 2 / QWERTZ / QWERTY mapping logic, expanded exercise catalogs, persistent statistics, static web hosting (GitHub Pages), and Progressive Web App (PWA) installability remain planned for subsequent packages.
 
 ## Product Goals
 
@@ -13,6 +22,7 @@ The initial repository bootstrap and `TF-WEB-001` First-Family Web Shell are com
 - **Fast Practice Sessions**: Lightweight, immediate, and distraction-free typing exercises.
 - **Instant Feedback**: Low-latency correctness and error indication during keystroke input.
 - **Progress & Mastery**: Planned support for learning statistics, fluency tracking, and error analysis.
+- **Web & PWA Delivery**: Intended for public static hosting on GitHub Pages and installable as a Progressive Web App for desktop launcher access (not yet deployed).
 
 ## Design Family & Reference Projects
 
